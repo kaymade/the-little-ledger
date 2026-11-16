@@ -8,12 +8,12 @@
 
 ## First Release
 
-- [ ] Add, view, edit, and delete transactions
+- [x] Add, view, edit, and delete transactions
 - [ ] Organize transactions by spending category
 - [ ] Set a budget for a category
 - [ ] See spending and the remaining budget on a dashboard
 
-The first workflow that I would like to demo with this project is setting a grocery shopping budget, logging a purchase, and seeing what's left. If I enter the wrong amount at any point, I should be able to correct the transaction and see the budget update immediately. 
+The first workflow that I would like to demo with this project is setting a grocery shopping budget, logging a purchase, and seeing what's left. If I enter the wrong amount at any point, I should be able to correct the transaction and see the budget update immediately.
 
 ## Planned Stack
 
