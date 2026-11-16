@@ -1,11 +1,13 @@
 import { type SubmitEvent, useState, useRef, useId } from "react";
 import { samplePurchases } from "../data/samplePurchases";
+import { getPurchaseLabel } from "../data/purchaseLabels";
 import { NewPurchaseDialog } from "./NewPurchaseDialog";
 import { PurchaseReceipt } from "./PurchaseReceipt";
+import { formatPurchaseDate } from "../utils/formatPurchaseDate";
 
 let nextId = 2;
 
-export function PurchaseHistory() {
+export function PurchaseHistory({ fullDate }: { fullDate: boolean }) {
   const [selectedValue, setSelectedValue] = useState("");
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -24,12 +26,20 @@ export function PurchaseHistory() {
           setSelectedId(purchase.id);
           handleViewDetails();
         }}
+        className="purchase-row"
       >
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(purchase.amount)}{" "}
-        {purchase.date} {purchase.category}
+        <span className="purchase-row-details">
+          <span>{formatPurchaseDate(purchase.date, fullDate)}</span>
+          <span>
+            {getPurchaseLabel(purchase.category, purchase.subcategory)}
+          </span>
+        </span>
+        <span className="purchase-row-amount">
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+          }).format(purchase.amount)}{" "}
+        </span>
       </button>
     </li>
   ));
@@ -46,8 +56,11 @@ export function PurchaseHistory() {
         onSubmit={handleSubmit}
         onRequestClose={handleClose}
       />
-      <button onClick={handleClick}>ADD EXPENSE</button>
-      <ul>{listItems}</ul>
+      <div className="purchase-history-header">
+        <h2>Your Purchase History</h2>
+        <button onClick={handleClick}>ADD EXPENSE</button>
+      </div>
+      <ul className="purchase-list">{listItems}</ul>
       <PurchaseReceipt
         dialogRef={receiptDialogRef}
         selectedPurchase={selectedPurchase}
@@ -57,6 +70,7 @@ export function PurchaseHistory() {
         onRequestClose={handleCloseReceipt}
         onClose={() => setEdit(false)}
         onDelete={handleDeletePurchase}
+        fullDate={fullDate}
       />
     </>
   );
@@ -116,9 +130,9 @@ export function PurchaseHistory() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    const submittedCategory = formJson.categories
-    const submittedDate = formJson.date
-    const submittedNotes = formJson.notes
+    const submittedCategory = formJson.categories;
+    const submittedDate = formJson.date;
+    const submittedNotes = formJson.notes;
 
     if (
       typeof submittedCategory !== "string" ||
@@ -131,9 +145,16 @@ export function PurchaseHistory() {
 
     const updatedPurchase = purchaseHistory.map((purchase) => {
       if (purchase.id === selectedId) {
-        const categoryChanged = purchase.category !== submittedCategory
-        const nextSubcategory = categoryChanged ? "" : purchase.subcategory
-        return { ...purchase, amount: Number(formJson["purchase-amount"]), date: submittedDate, category: submittedCategory, subcategory: nextSubcategory, notes: submittedNotes };
+        const categoryChanged = purchase.category !== submittedCategory;
+        const nextSubcategory = categoryChanged ? "" : purchase.subcategory;
+        return {
+          ...purchase,
+          amount: Number(formJson["purchase-amount"]),
+          date: submittedDate,
+          category: submittedCategory,
+          subcategory: nextSubcategory,
+          notes: submittedNotes,
+        };
       }
 
       return purchase;
@@ -150,15 +171,17 @@ export function PurchaseHistory() {
   }
 
   function handleDeletePurchase() {
-    const confirmed = window.confirm("Delete this transaction?")
+    const confirmed = window.confirm("Delete this transaction?");
 
     if (!confirmed) {
-      return
+      return;
     }
 
-    const remainingPurchases = purchaseHistory.filter(purchase => purchase.id !== selectedId)
-    setPurchaseHistory(remainingPurchases)
-    handleCloseReceipt()
-    setSelectedId(null)
+    const remainingPurchases = purchaseHistory.filter(
+      (purchase) => purchase.id !== selectedId,
+    );
+    setPurchaseHistory(remainingPurchases);
+    handleCloseReceipt();
+    setSelectedId(null);
   }
 }

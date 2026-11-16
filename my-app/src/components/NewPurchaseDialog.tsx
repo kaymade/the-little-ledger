@@ -23,25 +23,37 @@ export function NewPurchaseDialog({
 }: NewPurchaseDialogProps) {
   return (
     <dialog id="new-expense-dialog" ref={dialogRef}>
-      <h2>Log a New Expense</h2>
-      <hr />
-      <form method="post" onSubmit={onSubmit}>
-        <label>
-          Amount of Purchase: $
-          <input
-            type="number"
-            name="amount"
-            step="0.01"
-            min="0.01"
-            required
-          />
-        </label>
-        <hr />
-        <label>
-          Purchase Date:
-          <input type="date" name="date" required />
-        </label>
-        <hr />
+      <div className="purchase-dialog-header">
+        <h2>Log a New Expense</h2>
+        <button
+          type="button"
+          id="close-btn"
+          className="purchase-dialog-close"
+          aria-label="Close dialog"
+          onClick={onRequestClose}
+        >
+          ✖
+        </button>
+      </div>
+
+      <form method="post" onSubmit={onSubmit} className="purchase-dialog-form">
+        <div className="purchase-field-pair">
+          <label>
+            Amount of Purchase: $
+            <input
+              type="number"
+              name="amount"
+              step="0.01"
+              min="0.01"
+              required
+            />
+          </label>
+
+          <label>
+            Purchase Date:
+            <input type="date" name="date" required />
+          </label>
+        </div>
         <label>
           Category:
           <select
@@ -90,7 +102,6 @@ export function NewPurchaseDialog({
             </option>
           </select>
         </label>
-        <hr />
 
         {selectedValue === "food-and-drink" && (
           <label id="food-and-drink-sub">
@@ -201,9 +212,7 @@ export function NewPurchaseDialog({
                 Therapy, Psychiatry, & Mental Health
               </option>
               <option value="pt">Physical Therapy</option>
-              <option value="med-supplies">
-                Medical Supplies & Equipment
-              </option>
+              <option value="med-supplies">Medical Supplies & Equipment</option>
               <option value="vitamins">Vitamins & Supplements</option>
               <option value="gym">Gym & Fitness</option>
               <option value="sports-rec">Sports & Recreation</option>
@@ -252,9 +261,7 @@ export function NewPurchaseDialog({
               <option value="childcare">Childcare & Babysitting</option>
               <option value="baby-supplies">Baby Supplies</option>
               <option value="school-supplies">School Supplies & Fees</option>
-              <option value="activities-camp">
-                Kids' Activities & Camps
-              </option>
+              <option value="activities-camp">Kids' Activities & Camps</option>
               <option value="child-support">Child Support</option>
               <option value="family-support">Family Support</option>
               <option value="elder-care">Elder Care</option>
@@ -402,7 +409,6 @@ export function NewPurchaseDialog({
           </label>
         )}
 
-        <hr />
         <label>
           Notes:
           <textarea
@@ -412,14 +418,16 @@ export function NewPurchaseDialog({
             cols={40}
           />
         </label>
-        <hr />
 
-        <button type="submit" id="expense-submit">
-          SAVE EXPENSE
-        </button>
-        <button type="button" id="close-btn" onClick={onRequestClose}>
-          ✖
-        </button>
+        <div className="purchase-dialog-actions">
+          <button
+            type="submit"
+            id="expense-submit"
+            className="receipt-primary-btns"
+          >
+            SAVE EXPENSE
+          </button>
+        </div>
       </form>
     </dialog>
   );
