@@ -1,5 +1,5 @@
 // Display labels match the purchase form options.
-const categoryLabels = new Map([
+export const categoryLabels = new Map([
   ["education-work", "Education & Work"],
   ["debt-taxes-fees", "Debt, Taxes, & Fees"],
   ["family-pets", "Family & Pets"],

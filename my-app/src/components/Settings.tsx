@@ -1,9 +1,13 @@
+import { rolloverOptions, type RolloverMode } from "../data/sampleBudget";
+
 type SettingsProps = {
   fullDate: boolean;
   onFullDateChange: (fullDate: boolean) => void;
   darkMode: boolean;
   onDarkModeChange: (darkMode: boolean) => void;
   onBack: () => void;
+  defaultRolloverMode: RolloverMode;
+  setDefaultRolloverMode: (value: RolloverMode) => void;
 };
 
 export function Settings({
@@ -12,6 +16,8 @@ export function Settings({
   darkMode,
   onDarkModeChange,
   onBack,
+  defaultRolloverMode,
+  setDefaultRolloverMode,
 }: SettingsProps) {
   return (
     <main className="ledger-settings" aria-labelledby="settings-title">
@@ -82,6 +88,26 @@ export function Settings({
             />
           </label>
         </fieldset>
+        <label className="rollover-settings">
+          Budget Balance Rollover Options
+          <select
+            value={defaultRolloverMode}
+            onChange={(event) => {
+              const value = event.currentTarget.value;
+              const option = rolloverOptions.find(
+                (entry) => entry.value === value,
+              );
+
+              if (option) setDefaultRolloverMode(option.value);
+            }}
+          >
+            {rolloverOptions.map((entry) => (
+              <option key={entry.value} value={entry.value}>
+                {entry.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
     </main>
   );

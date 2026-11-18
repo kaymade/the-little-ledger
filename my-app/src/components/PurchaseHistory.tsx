@@ -1,18 +1,27 @@
 import { type SubmitEvent, useState, useRef, useId } from "react";
-import { samplePurchases } from "../data/samplePurchases";
 import { getPurchaseLabel } from "../data/purchaseLabels";
 import { NewPurchaseDialog } from "./NewPurchaseDialog";
 import { PurchaseReceipt } from "./PurchaseReceipt";
 import { formatPurchaseDate } from "../utils/formatPurchaseDate";
+import type { Purchase } from "../data/samplePurchases";
 
 let nextId = 2;
 
-export function PurchaseHistory({ fullDate }: { fullDate: boolean }) {
+type PurchaseHistoryProps = {
+  fullDate: boolean;
+  purchaseHistory: Purchase[];
+  setPurchaseHistory: (nextPurchase: Purchase[]) => void;
+};
+
+export function PurchaseHistory({
+  fullDate,
+  purchaseHistory,
+  setPurchaseHistory,
+}: PurchaseHistoryProps) {
   const [selectedValue, setSelectedValue] = useState("");
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedSubValue, setSelectedSubValue] = useState("");
-  const [purchaseHistory, setPurchaseHistory] = useState(samplePurchases);
   const inputRef = useRef<HTMLDialogElement>(null);
   const receiptDialogRef = useRef<HTMLDialogElement>(null);
   const addExpenseTextAreaId = useId();
