@@ -130,7 +130,6 @@ export function PurchaseHistory({
       notes: formJson.expenseNotes,
     };
     setPurchaseHistory([...purchaseHistory, newPurchase]);
-    console.log(newPurchase);
     handleClose();
   }
 
